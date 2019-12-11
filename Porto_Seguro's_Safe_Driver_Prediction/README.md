@@ -22,8 +22,22 @@ Bert Carremans 커널로 EDA, Feature Engineering(Dummification, Interaction), F
 
 Anisotropic의 커널로 [Plot.ly](https://plot.ly/)에 대해 배울 수 있습니다. Plot.ly는 정적인 일반 Plot과 대조되게 동적입니다. 마우스 커서를 움직임에 따라 variable 이름을 보여주며, 드래그를 하면 해당 부분을 확대시켜 줍니다.
 
+#### 3rd Kernel:   Exploratory Analysis and Prediction
+
+ Gabriel Preda의 커널로 첫 번째 커널과 마찬가지로 Meta-data를 활용했습니다. 데이터 타입별로 세부적으로 EDA를 했다는 특징이 있습니다. 각 타입별로 어떤 특징이 있는지 살펴볼 수 있습니다. 
+
+성능 향상을 위해 calc 타입의 feature를 drop 했고, 결측치가 많은 feature도 drop 했습니다. ps_car_11_cat feature는 target 인코딩을 했습니다. 또한, 첫 번째 커널과 마찬가지로 target = 0인 데이터를 언더 샘플링하는 방법을 취했습니다. 
+
+추가적으로 categorical feature는 Dummificiation하여 인코딩을 했으며, 필요 없는 feature는 drop을 했습니다. 
+
+가장 중요한 모델 부분은 LGBMClassifier와 XGBClassfier를 LogisticRegression으로 Stacking 했습니다.
+
+본 커널은 전반적으로 첫번째 커널과 비슷하지만 Stacking을 사용했다는 점이 특이점입니다.
+
 ## Reference
 
 Bert Carremans 커널: https://www.kaggle.com/bertcarremans/data-preparation-exploration
 
 Anisotropic 커널: https://www.kaggle.com/arthurtok/interactive-porto-insights-a-plot-ly-tutorial
+
+Gabriel Preda 커널:  https://www.kaggle.com/gpreda/porto-seguro-exploratory-analysis-and-prediction 
