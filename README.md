@@ -35,3 +35,6 @@ Ridge, Lasso, Random Forest, Gradient Boost를 통한 자전거 수요량 예측
 
 각 고객의 정보를 기반으로 해당 고객이 대출한 돈을 갚을 수 있을지 없을지에 대한 확률을 예측
 
+### 7. Costa Rican Household Poverty Level Prediction
+
+한 가정이 가지고 있는 140여 개의 속성을 기반으로 그 가정이 가난한 가정인지 부유한 가정인지 판단 (Multi Class Classification)
