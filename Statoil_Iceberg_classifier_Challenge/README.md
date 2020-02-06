@@ -10,8 +10,6 @@ https://www.kaggle.com/c/statoil-iceberg-classifier-challenge
 
 본 대회의 주요 커널에서는 대부분 딥러닝 CNN(합성곱 신경망)을 활용하여 결과를 예측했습니다.
 
-
-
 ## 1st Kernel: Exploration & Transforming
 
 본 커널에서는 실제 예측은 하지 않고, 빙하와 배 이미지를 그려봅니다. 우선, `imshow`를 활용하여 빙하와 배 이미지를 있는 그대로 먼저 그렸습니다. 그리고 몇가지 Transforming 기법을 적용한 이미지도 그려봤습니다. Transforming이란 카메라 필터처럼 필터를 적용한 이미지를 도출하는 것을 의미합니다. 사용한 Transforming 기법은 smooth, X-derivative, Gradient (= x-derivative + y-derivative), second derivative, Laplacian (= sum of second derivative)입니다.
@@ -35,7 +33,7 @@ signal.convolve2d(np.reshape(np.array(icebergs.iloc[i,1]),(75,75)),smooth, mode=
 
 **Sequential API**
 
-Keras를 활용하여 Model을 만드는 방법은 두가지가 있습니다. 하나는 `Sequential` API를 사용하는 것이고 하나는 `Model` 함수 API를 사용하는 것입니다. 아래는 `Sequential` API를 사용한 예제입니다. Sequential API는 계층별로 나란히 연결하여 쉽게 사용할 수 있다는 장점이 있지만 multiple input, multiple output이 불가능하다는 단점이 있습니다.
+Keras를 활용하여 Model을 만드는 방법은 두가지가 있습니다. 하나는 `Sequential` API를 사용하는 것이고 하나는 함수형 API인 `Model` 함수를 사용하는 것입니다. Sequential API는 계층별로 층층이 (layer-by-layer) 연결하여 쉽게 사용할 수 있다는 장점이 있지만 다중입출력(multiple input, multiple output)이 불가능하다는 단점이 있습니다. 단일 입출력을 갖는 대부분의 딥러닝 모델은 `Sequential`로 구현이 가능하지만 다양한 변형을 위해서는 함수형 API를 사용하는 것이 좋습니다. 아래는 `Sequential` API를 사용한 예제입니다. [(Reference2)](https://jovianlin.io/keras-models-sequential-vs-functional/)
 
 ```python
 def getModel():
@@ -65,9 +63,7 @@ def getModel():
     return gmodel
 ```
 
-위와 같이 `Sequential()` 모델을 먼저 만든 뒤 해당 모델에 `.add()`를 통해 여러 계층(Layer)를 연결해주면 됩니다.
-
-
+보시는 바와 같이 처음에 `Sequential()` 모델을 먼저 만든 뒤 해당 모델에 `.add()`를 통해 여러 계층(Layer)를 층층이 연결해주면 됩니다.
 
 ## 3rd Kernel: A Keras Prototype
 
@@ -104,9 +100,11 @@ def get_model():
     return model
 ```
 
-`Sequential`과 다르게 Multiple input 및 Multiple ouput이 가능합니다. 
+함수형 API는 `Sequential`과 다르게 다중입출력(Multiple input 및 Multiple ouput)이 가능합니다. 맨 처음 `Input`을 정의해주고, 마지막에 `Output`을 만들어 준 뒤 `Model`함수에 `input`과 `output`을 넣어줘 Model을 만들었습니다. 위 예제에서는 input이 두개입니다.
 
 **Sequential Model vs Functional Model**
+
+아래는 두 모델 간의 차이를 나타내는 간략한 코드입니다.
 
 ```python
 # Sequential Model
@@ -130,15 +128,13 @@ output = Dense(2)(input)
 model = Model(inputs=visible, outputs=output)
 ```
 
-
-
 ## 4th Kernel: Keras+TF
+
+본 커널에서 특이한 점은 이미지 복구와 ImageDataGenerator를 사용했다는 점입니다. 이미지 복구 모듈을 사용해 노이즈를 제거해줬고, ImageDataGenerator를 사용해 이미지 데이터를 다양하게 변형시켜 훈련해줬습니다.
 
 **이미지 복구**
 
-본 커널에서는 이미지 복구 모듈인 `skimage.restoration`를 활용하여 노이즈를 제거했습니다.
-
-
+이미지 복구 모듈인 `skimage.restoration`를 활용하여 노이즈를 제거했습니다. [(Reference3)][https://scikit-image.org/docs/dev/api/skimage.restoration.html]
 
 **ImageDataGenerator**
 
@@ -166,16 +162,16 @@ model.fit_generator(datagen.flow(x_train, y_train, batch_size=32),
                     steps_per_epoch=len(x_train) / 32, epochs=epochs)
 ```
 
-https://keras.io/preprocessing/image/
+[(Reference4)](https://keras.io/preprocessing/image/)
 
-`ImageDataGenerator.flow`는 다양하게 변형하여 새로 만들어진 이미지 데이터에 대한 Iterator를 반환합니다. 이 Iterator는 Input과 Label값을 가지고 있고 batch_size만큼 반환합니다. `fit_generator`는 Iterator에서 반환한 이미지만큼 계속 학습시킵니다. `steps_per_epoch`은 한번의 epoch마다 몇번의 batch를 iterator로 반환시킬지를 의미합니다. 예를들어, x_train 훈련 데이터 수가 128개이고, batch_size=32, steps_per_epoch=4 라고 하면 iterator에서 데이터를 반환할 때 4개씩 반환하고 총 32번 반복한다는 뜻입니다. 즉, 한번의 epoch마다 사용되는 훈련 데이터 수는 steps_per_epoch * batch_size입니다.
+`ImageDataGenerator.flow`는 다양하게 변형하여 새로 만들어진 이미지 데이터에 대한 Iterator를 반환합니다. 이 Iterator는 Input과 Label값을 가지고 있고, 한번에 batch_size만큼 변형된 이미지 데이터를 반환합니다. `fit_generator`는 Iterator에서 반환한 이미지만큼 계속 학습시킵니다. `epoch`은 전체 훈련 데이터 셋에 대한 학습 반복 횟수입니다. `steps_per_epoch`은 한번의 epoch마다 몇번의 batch를 iterator로 반환시킬지를 의미합니다. 예를들어, x_train 훈련 데이터 수가 128개이고, batch_size=32, steps_per_epoch=4 라고 하면 iterator에서 데이터를 반환할 때 32개씩 반환하고 총 4번 반복한다는 뜻입니다. 즉, 한번의 epoch마다 사용되는 훈련 데이터 수는 steps_per_epoch * batch_size입니다.
 
 ```python
 model.fit_generator(datagen.flow(x_train, y_train, batch_size=32),
                     steps_per_epoch=len(x_train) / 32, epochs=epochs)
 ```
 
-위 코드를 풀어쓰면 아래와 같습니다. epochs만큼 루프를 돌며 `datagen.flow` Iterator에서 반환된 이미지 데이터를 이용해 훈련을 합니다.
+위 코드를 풀어쓰면 아래와 같습니다. epochs만큼 루프를 돌며 `datagen.flow` Iterator에서 반환된 이미지 데이터를 이용해 훈련을 합니다. (아래 코드는 공식 문서에 있는 코드입니다.)
 
 ```python
 # here's a more "manual" example
@@ -191,18 +187,20 @@ for e in range(epochs):
             break
 ```
 
+### References
 
+[Reference1: scipy.signal.convolve2d Document](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve2d.html)
 
+[Reference2: Keras Models Sequential vs Functional](https://jovianlin.io/keras-models-sequential-vs-functional/)
 
+[Reference3: scikit-image restoration Document](https://scikit-image.org/docs/dev/api/skimage.restoration.html)
 
+[Reference4: Keras Image Preprocessing Document](https://keras.io/preprocessing/image/)
 
+1st Kernel: https://www.kaggle.com/muonneutrino/exploration-transforming-images-in-python
 
+2nd Kernel: https://www.kaggle.com/devm2024/keras-model-for-beginners-0-210-on-lb-eda-r-d
 
+3rd Kernel: https://www.kaggle.com/knowledgegrappler/a-keras-prototype-0-21174-on-pl
 
-Reference Kernels
-
-1st Kernel: https://www.kaggle.com/willkoehrsen/a-complete-introduction-and-walkthrough
-
-2nd Kernel: https://www.kaggle.com/youhanlee/3250feats-532-feats-using-shap-lb-0-436
-
-3rd Kernel: https://www.kaggle.com/skooch/xgboost
+4th Kernel: https://www.kaggle.com/wvadim/keras-tf-lb-0-18
