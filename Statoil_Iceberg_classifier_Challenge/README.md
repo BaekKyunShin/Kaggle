@@ -134,7 +134,7 @@ model = Model(inputs=visible, outputs=output)
 
 **이미지 복구**
 
-이미지 복구 모듈인 `skimage.restoration`를 활용하여 노이즈를 제거했습니다. [(Reference3)][https://scikit-image.org/docs/dev/api/skimage.restoration.html]
+이미지 복구 모듈인 `skimage.restoration`를 활용하여 노이즈를 제거했습니다. [(Reference3)](https://scikit-image.org/docs/dev/api/skimage.restoration.html)
 
 **ImageDataGenerator**
 
