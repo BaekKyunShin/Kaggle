@@ -38,3 +38,7 @@ Ridge, Lasso, Random Forest, Gradient Boost를 통한 자전거 수요량 예측
 ### 7. Costa Rican Household Poverty Level Prediction
 
 한 가정이 가지고 있는 140여 개의 속성을 기반으로 그 가정이 가난한 가정인지 부유한 가정인지 판단 (Multi Class Classification)
+
+### 8. Statoil/C-CORE Iceberg Classifier Challenge
+
+본 대회는 위성으로 바다 위를 찍은 사진을 기반으로 그 물체가 빙하인지 배인지 분류하는 대회입니다. (Statoil과 C-CORE는 회사 이름입니다.)
